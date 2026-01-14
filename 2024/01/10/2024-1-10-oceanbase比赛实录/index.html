@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="bach">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Oceanbase比赛的最后一天是挺梦幻的，中午还是5秒2，晚上就冲上了2秒9。 比赛结束的前一天晚上，吃完晚饭已经8点多了，离比赛结束还有不到24小时。而我们只有18名，我知道接下来得争分夺秒了，目前的名次肯定是不够看的。 从11点发现tpcc的问题，看了一波obd的报错，缩小了问题范围，是虚拟表的内容不对，可能牵扯到all_merge_info的那几张表，但不知道如何解决，怀疑是有几张表的重定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oceanbase比赛实录">
+<meta property="og:url" content="https://bi-li.fun/2024/01/10/2024-1-10-oceanbase%E6%AF%94%E8%B5%9B%E5%AE%9E%E5%BD%95/index.html">
+<meta property="og:site_name" content="Bi-li.fun">
+<meta property="og:description" content="Oceanbase比赛的最后一天是挺梦幻的，中午还是5秒2，晚上就冲上了2秒9。 比赛结束的前一天晚上，吃完晚饭已经8点多了，离比赛结束还有不到24小时。而我们只有18名，我知道接下来得争分夺秒了，目前的名次肯定是不够看的。 从11点发现tpcc的问题，看了一波obd的报错，缩小了问题范围，是虚拟表的内容不对，可能牵扯到all_merge_info的那几张表，但不知道如何解决，怀疑是有几张表的重定">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-01-10T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-01-14T15:48:35.627Z">
+<meta property="article:author" content="bach">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Oceanbase比赛实录 - Bi-li.fun</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"bi-li.fun","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Oceanbase比赛实录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-10 00:00" pubdate>
+          2024年1月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Oceanbase比赛实录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Oceanbase比赛的最后一天是挺梦幻的，中午还是5秒2，晚上就冲上了2秒9。</p>
+<p>比赛结束的前一天晚上，吃完晚饭已经8点多了，离比赛结束还有不到24小时。而我们只有18名，我知道接下来得争分夺秒了，目前的名次肯定是不够看的。</p>
+<p>从11点发现tpcc的问题，看了一波obd的报错，缩小了问题范围，是虚拟表的内容不对，可能牵扯到all_merge_info的那几张表，但不知道如何解决，怀疑是有几张表的重定向没有还原。我们一遍又一遍查gen_meta_tenant_id的调用地方，就这样不知不觉到了3点，又到了5点还没解决。我实在撑不住睡觉了，睡前想着如果庞哥能搞定就好了。我记得那晚寝室灯也没关，就那么睡着了。8点醒了发现庞哥7点发了一个消息，“tpcc问题解决了，去睡40分钟”，庞哥熬了一晚上把问题解决了，把所有重定向到sys租户的表基本上还原，肝一肝出了奇迹。这下并行没问题了。1号的思路终于在比赛结束前6小时实现了。</p>
+<p>早上起来看到庞哥还没睡，真是神人。起床来继续创造奇迹，一个上午尝试把refresh放到后台执行，到中午12点发现无果。此时，离比赛结束还剩6个小时了，而我们的最新成绩是5秒2，排名16的样子，相比6号进步了800ms，但是还不够啊，唉，点了一份大米先生外卖，直接肝。</p>
+<p>不知怎么发现，主线程只需睡1500ms，这样还是有几率通过的，而到下午4点，已经尝试缩短到300ms了，因为sysbench在本地有几率过，特别是把后台的vscode和clangd都关了，有3成的几率能通过sysbench，所以，线上一定能过！已经破罐子破摔了，毕竟没有多少可以失去的了，输了不亏，赢了血赚。</p>
+<p>一边改代码一边拍桌子，从来就没有这么兴奋过。</p>
+<p>这几天，首先是restart起不来，花了好几天时间解决，应该是all_server还是哪张表的start_service_time一直等于0，感觉是后台卡在start的一步里，但是看了好几天代码，没发现端倪。总之，我猜测和建表顺序有关系，因为从9号到10号，使用的是庞哥的sys表先建的方法，还原成串行建表以后，最先最古老的代码是一定能跑的，甚至没有考虑到建表失败的重试，可见ob对自己的信心。从那以后，几乎所有hash not exist问题都不存在了，虽然串行比较耗时，大约在2.7秒左右，但是小问题基本上消失了。</p>
+<p>最后一天下午，我们发现，deploy已经能到3.6s，这是1500ms的睡眠，少睡1秒应该能过，但sysbench大约在31秒，胜算很低，怎么缩短一秒，只能在建表这里挤一挤，恢复成并行建表逻辑，差距不大，但好像有一丢丢的提升，最后的最后，把refresh和set baseline schema version注释掉，因为6秒的那次提交能过，那么说明不刷新schema也是可以的。最后的俩小时，已经把日志级别去除了追求极限，已经没有时间排查问题，只有不断尝试（重试）。事实上到下午5点，我们还是半小时提交一发，还剩3发提交。</p>
+<p>3秒2的那次，已经很超出预期了，提升了2s，从20吊车尾到稳了前十。多刷几次也不过2.9s第七名。最后一小时，抱着死马当活马医的态度，创建了4个分支，尝试sleep时间从500ms到300ms不等，卡评测机器的极限。我们没有优化点了，只有把手上的牌全部提交，哪怕成绩作废。</p>
+<p>比赛结束的时候很平静，看着6点过了，心想这比赛再长，也让我们走到了终点，大家也不用费尽心思找优化点了，不用时刻盯着排行榜，来哥也不用凌晨重启服务器了。</p>
+<p>我和庞哥去龙湖吃鸡汤饭，出校门的路上突然就很困，从前一天上午到现在，好像一直坐在电脑前看log解决问题，时间在飞速流逝，不知不觉就第二天了，突然一下就比赛结束了，昨天晚上到现在，没时间顾及其他事情，也没怎么休息，看来是该睡了，看着评测结果全是红，一边复盘一边想着我这一天做了什么。5点半的倒数几次提交，基本上都挂了。看来健壮性确实不行，只跑出一次3秒2，没有提升。鸡汤饭快吃完了，关键的来了，庞哥在手机上看到2.3s的成绩，一瞬间还以为眼花，一看已经6点40，估计成绩作废了，我开了一下排行榜，成绩居然变了？！what the fuck？没想到在截止时间前的提交还计数？这下不得不起飞了，我也不知道5点51我抱着什么心态交的这一发，估计是看着那个版本sleep的300ms有希望过，那只有1成胜算，我也不知道最后一刻的评测机抱着什么心态跑完的，给了个2222ms的成绩，也不知道测评榜怎么还变化了，在比赛结束后还在滚动。也不知道成绩是否有效，所以，耐心等待最终提测成绩吧。</p>
+<p>回去的路上7点多了，街上霓虹闪烁，前几天晚上吃饭回去天还是蓝的。停在路口的红绿灯前，只想着回寝室快点睡上一觉。</p>
+<p>写着写着，发现对比赛的记忆也越来越淡了，不记得为了miniob所熬的几个夜，也不记得没去听的几门课，好像也不记得昨天究竟改了什么代码，让最终跑过了tpcc，跑过了sysbench。比赛时一遍又一遍想着最终的结果怎样怎样，能不能拿到前六和实习，现在回想看来，尽管题目很烂，写的代码也很烂，经常看了一整天log啥都没看出来，但经历很充足很充实，比赛结果还不赖，回顾比赛的经历冲淡了比赛结果本身带来的喜悦。觉得今年下半年多少是做了一些有意思的工作，推掉一些工作来肝oceanbase，取得了一点小小的回报，至少在22岁这年有这件事，感觉活着还是有点意思的。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Oceanbase比赛实录</div>
+      <div>https://bi-li.fun/2024/01/10/2024-1-10-oceanbase比赛实录/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>bach</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/31/2024-12-31-2024%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" title="2024年终总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2024年终总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/09/27/2023-9-27-%E6%82%A3%E5%BE%97%E6%82%A3%E5%A4%B1/" title="患得患失">
+                        <span class="hidden-mobile">患得患失</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="waline"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#waline', function() {
+      Fluid.utils.createCssLink('https://lib.baomitu.com/waline/2.14.1/waline.min.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/waline/2.14.1/waline.min.js', function() {
+        var options = Object.assign(
+          {"serverURL":"https://waline.junling.li/","path":"window.location.href","meta":["nick","mail","link"],"requiredMeta":["nick"],"lang":"zh-CN","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"],"dark":"html[data-user-color-scheme=\"dark\"]","wordLimit":0,"pageSize":10},
+          {
+            el: '#waline',
+            path: window.location.href
+          }
+        )
+        Waline.init(options);
+        Fluid.utils.waitElementVisible('#waline .vcontent', () => {
+          var imgSelector = '#waline .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
